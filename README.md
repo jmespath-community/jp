@@ -4,7 +4,7 @@ jp
 [![GoDoc](https://godoc.org/github.com/jmespath-community/go-jmespath?status.svg)](https://godoc.org/github.com/jmespath-community/go-jmespath)
 
 The ``jp`` command is a command line interface to
-[JMESPath](http://jmespath.org), an expression
+[JMESPath](http://jmespath.site/main), an expression
 language for manipulating JSON:
 
 ```
@@ -193,7 +193,7 @@ Processing: c
 
 If you're new to the JMESPath language, or just want to see what the language is
 capable of, you can check out the [JMESPath tutorial](https://jmespath.site/main/#tutorial)
-as well as the [JMESPath examples](http://jmespath.org/main/#examples), which contains
+as well as the [JMESPath examples](http://jmespath.site/main/#examples), which contains
 a curated set of JMESPath examples.  But for now, here's a real world example.
 Let's say you wanted to see what the latest activity was with regard to the issue
 tracker for one of your github issues.  Here's a simple way to do this:
