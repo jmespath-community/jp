@@ -1,6 +1,8 @@
 jp
 ==
 
+[![GoDoc](https://godoc.org/github.com/jmespath-community/go-jmespath?status.svg)](https://godoc.org/github.com/jmespath-community/go-jmespath)
+
 The ``jp`` command is a command line interface to
 [JMESPath](http://jmespath.org), an expression
 language for manipulating JSON:
@@ -21,26 +23,26 @@ brew install jmespath/jmespath/jp
 ```
 
 You can download prebuilt binaries if you prefer.
-Check the [Release page](https://github.com/jmespath/jp/releases)
+Check the [Release page](https://github.com/jmespath-community/jp/releases)
  to download the latest ``jp`` executable.  There are binaries
 available for Windows, Linux, Mac, FreeBSD.
 
 For example, to install the latest version on a 64 bit Linux environment use:
 
 ```sh
-sudo wget https://github.com/jmespath/jp/releases/latest/download/jp-linux-amd64 \
+sudo wget https://github.com/jmespath-community/jp/releases/latest/download/jp-linux-amd64 \
   -O /usr/local/bin/jp  && sudo chmod +x /usr/local/bin/jp            
 ```
 
 ## Building from Source
 
 If you have a Go environment installed you can also run:
-``go get -u github.com/jmespath/jp`` to get the latest version
+``go get -u github.com/jmespath-community/jp`` to get the latest version
 of jmespath.  If you have the repo checked out locally you can also
 just ``go build`` the project:
 
 ```sh
-git clone git://github.com/jmespath/jp
+git clone git://github.com/jmespath-community/jp
 cd jp
 go build
 ./jp --help
@@ -52,7 +54,7 @@ have a workspace/GOPATH configured, you can just run
 ``jp`` executable for you:
 
 ```sh
-git clone git://github.com/jmespath/jp
+git clone git://github.com/jmespath-community/jp
 cd jp
 scripts/build-self-contained
 ./jp --help
@@ -83,7 +85,7 @@ $ echo '{"foo": {"bar": ["a", "b", "c"]}}' | jp foo.bar[1]
 
 Note the argument after ``jp``.  This is a JMESPath expression.
 If you have no idea what that is, there's a
-[JMESPath Tutorial](http://jmespath.org/tutorial.html) that
+[JMESPath Tutorial](http://jmespath.site/main/#tutorial) that
 will take you through the JMESPath language.
 
 ## Input From a File
@@ -160,7 +162,7 @@ $ echo '{"foo": ["bar", "baz"]}' | jp -u foo
 ```
 
 You can also use the ``-u/--unquoted`` option along with the
-[join](http://jmespath.org/specification.html#join) function to create a list
+[join](https://jmespath.site/main/#func-join) function to create a list
 of strings that can be piped into other POSIX text tools. For example:
 
 ```
@@ -190,8 +192,8 @@ Processing: c
 ## Examples
 
 If you're new to the JMESPath language, or just want to see what the language is
-capable of, you can check out the [JMESPath tutorial](http://jmespath.org/tutorial.html)
-as well as the [JMESPath examples](http://jmespath.org/examples.html), which contains
+capable of, you can check out the [JMESPath tutorial](https://jmespath.site/main/#tutorial)
+as well as the [JMESPath examples](http://jmespath.org/main/#examples), which contains
 a curated set of JMESPath examples.  But for now, here's a real world example.
 Let's say you wanted to see what the latest activity was with regard to the issue
 tracker for one of your github issues.  Here's a simple way to do this:
@@ -251,7 +253,7 @@ has extensive testing to ensure it is parsing and evaluating JMESPath
 expressions correctly.
 
 To ensure that there are no regressions between `go-jmespath` and `jp`,
-the entire suite of [JMESPath compliance tests](https://github.com/jmespath/jmespath.test)
+the entire suite of [JMESPath compliance tests](https://github.com/jmespath-community/jmespath.test)
 are run against the `jp` executable.
 
 This repo also include CLI specific test that verify the command line

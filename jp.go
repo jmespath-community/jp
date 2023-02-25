@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/jmespath-community/go-jmespath"
 	"github.com/urfave/cli"
-	"github.com/jmespath/go-jmespath"
 )
 
 const version = "0.2.1"
@@ -21,8 +21,8 @@ func main() {
 	app.Email = ""
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
-			Name:   "compact, c",
-			Usage:  "Produce compact JSON output that omits nonessential whitespace.",
+			Name:  "compact, c",
+			Usage: "Produce compact JSON output that omits nonessential whitespace.",
 		},
 		cli.StringFlag{
 			Name:  "filename, f",

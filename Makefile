@@ -10,7 +10,7 @@ test:
 	# CLI specific test cases.
 	test/vendor/bats/libexec/bats test/cases
 	# JMESPath compliance tests, using the jp-compliance
-	# runner from github.com/jmespath/jmespath.test
+	# runner from github.com/jmespath-community/jmespath.test
 	test/jp-compliance -d test/compliance/ -e ./jp
 
 # This will create/tag a new release locally, but not push anything.
