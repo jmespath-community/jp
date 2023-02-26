@@ -11,7 +11,7 @@ test:
 	test/vendor/bats/libexec/bats test/cases
 	# JMESPath compliance tests, using the jp-compliance
 	# runner from github.com/jmespath-community/jmespath.test
-	test/jp-compliance -d test/compliance/ -e ./jp
+	compliance/bin/jp-compliance -d compliance/tests -x benchmarks,legacy-literal -e ./jp
 
 # This will create/tag a new release locally, but not push anything.
 # The workflow for a new release is:
