@@ -1,9 +1,9 @@
 #!/bin/bash
 # This is a self contained shell script for building jp without having to set
 # up GOPATH.  You just need go installed.
-tempdir="$(mktemp -d -t jpbuild)"
+tempdir="$(mktemp -d -t jpbuild_XXX)"
 tempgopath="$tempdir/go"
-jppath="${tempgopath}/src/github.com/jmespath"
+jppath="${tempgopath}/src/github.com/jmespath-community"
 fakerepo="$jppath/jp"
 mkdir -p $jppath
 ln -s "$(pwd)" "$jppath/jp"

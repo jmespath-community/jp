@@ -1,0 +1,58 @@
+---
+name: "release"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  run-tests:
+    name: Run Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        go-version: [1.18]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Build and test
+        run: make
+
+  release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Build all supported platforms
+        run: JP_VERSION=100.100.100 ./scripts/build-all-platforms
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ github.ref_name }}"
+          prerelease: true
+          title: "jp: ${{ github.ref_name }}"
+          files: |
+            build/*.tar.gz
+            build/jp-darwin-amd64
+            build/jp-darwin-arm64
+            build/jp-freebsd-386
+            build/jp-freebsd-amd64
+            build/jp-linux-386
+            build/jp-linux-arm-arm7
+            build/jp-linux-arm64
+            build/jp-windows-386
+            build/jp-windows-amd64

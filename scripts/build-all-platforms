@@ -30,7 +30,7 @@ for goos in linux darwin; do
 	go build -v -o build/jp-$GOOS-$GOARCH 2>/dev/null
 done
 # And finally we'll create a .tar.gz version for homebrew users.
-# We'll neend to figure out how to deal with M1 macbooks in the future.
+# We'll need to figure out how to deal with M1 macbooks in the future.
 cp build/jp-darwin-amd64 build/jp
 cd build
 tar cvfz jp-$JP_VERSION.tar.gz jp
