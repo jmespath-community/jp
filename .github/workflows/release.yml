@@ -57,6 +57,7 @@ jobs:
             build/jp-freebsd-386
             build/jp-freebsd-amd64
             build/jp-linux-386
+            build/jp-linux-amd64
             build/jp-linux-arm-arm7
             build/jp-linux-arm64
             build/jp-windows-386
