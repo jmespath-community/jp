@@ -69,3 +69,14 @@ ASTField {
   [ "$status" -eq 0 ]
   [ "$output" == "12345" ]
 }
+
+@test "Ignores subsequent data" {
+  output=$(echo '{"foo": "bar"}blah' | ./jp foo)
+  [ "$output" == "\"bar\"" ]
+}
+
+@test "Processes subsequent data in stream mode" {
+  output=$(echo '{"foo": "bar"}{"foo": "x"}' | ./jp -s foo)
+  echo "$output"
+  [ "$output" == $'\"bar\"\n\"x\"' ]
+}
