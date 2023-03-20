@@ -6,9 +6,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/fatih/color"
 	"github.com/jmespath-community/go-jmespath"
-	"github.com/nwidger/jsoncolor"
+	"github.com/springcomp/jsoncolor"
 	"github.com/urfave/cli"
 )
 
@@ -78,6 +77,21 @@ func runMain(c *cli.Context) int {
 		}
 		expression = c.Args()[0]
 	}
+	// NoColor defines if the output is colorized or not. It's dynamically set to
+	// false or true based on the stdout's file descriptor referring to a terminal
+	// or not. It's also set to true if the NO_COLOR environment variable is
+	// set (regardless of its value). This is a global option and affects all
+	// colors.
+	switch c.String("color") {
+	case "always":
+		EnableColor(true)
+	case "auto":
+		// this is the default in the library
+	case "never":
+		EnableColor(false)
+	default:
+		return errMsg("Invalid color specification. Must use always/auto/never")
+	}
 	if c.Bool("ast") {
 		parser := jmespath.NewParser()
 		parsed, err := parser.Parse(expression)
@@ -123,16 +137,8 @@ func runMain(c *cli.Context) int {
 		os.Stdout.WriteString(converted)
 	} else {
 		var toJSON []byte
-		if c.Bool("compact") {
-			toJSON, err = json.Marshal(result)
-		} else {
-			if color.NoColor {
-				// avoid doing the extra processing in jsoncolor
-				toJSON, err = json.MarshalIndent(result, "", "  ")
-			} else {
-				toJSON, err = jsoncolor.MarshalIndent(result, "", "  ")
-			}
-		}
+		var jsonWriter = getJSONWriter(c.Bool("compact"))
+		toJSON, err = jsonWriter(result)
 		if err != nil {
 			errMsg("Error marshalling result to JSON: %s\n", err)
 			return 3
@@ -141,4 +147,54 @@ func runMain(c *cli.Context) int {
 	}
 	os.Stdout.WriteString("\n")
 	return 0
+}
+
+func EnableColor(enabled bool) {
+
+	if enabled {
+		jsoncolor.DefaultArrayColor.EnableColor()
+		jsoncolor.DefaultColonColor.EnableColor()
+		jsoncolor.DefaultCommaColor.EnableColor()
+		jsoncolor.DefaultFalseColor.EnableColor()
+		jsoncolor.DefaultFieldColor.EnableColor()
+		jsoncolor.DefaultFieldQuoteColor.EnableColor()
+		jsoncolor.DefaultNullColor.EnableColor()
+		jsoncolor.DefaultNumberColor.EnableColor()
+		jsoncolor.DefaultObjectColor.EnableColor()
+		jsoncolor.DefaultSpaceColor.EnableColor()
+		jsoncolor.DefaultStringColor.EnableColor()
+		jsoncolor.DefaultStringQuoteColor.EnableColor()
+		jsoncolor.DefaultTrueColor.EnableColor()
+
+	} else {
+		jsoncolor.DefaultArrayColor.DisableColor()
+		jsoncolor.DefaultColonColor.DisableColor()
+		jsoncolor.DefaultCommaColor.DisableColor()
+		jsoncolor.DefaultFalseColor.DisableColor()
+		jsoncolor.DefaultFieldColor.DisableColor()
+		jsoncolor.DefaultFieldQuoteColor.DisableColor()
+		jsoncolor.DefaultNullColor.DisableColor()
+		jsoncolor.DefaultNumberColor.DisableColor()
+		jsoncolor.DefaultObjectColor.DisableColor()
+		jsoncolor.DefaultSpaceColor.DisableColor()
+		jsoncolor.DefaultStringColor.DisableColor()
+		jsoncolor.DefaultStringQuoteColor.DisableColor()
+		jsoncolor.DefaultTrueColor.DisableColor()
+	}
+}
+
+func getJSONWriter(compact bool) func(v interface{}) ([]byte, error) {
+	var writers = [2]func(v interface{}) ([]byte, error){
+		func(v interface{}) ([]byte, error) { return jsoncolor.MarshalIndent(v, "", "  ") },
+		jsoncolor.Marshal,
+	}
+	return writers[bool2int(compact)]
+}
+
+func bool2int(b bool) int {
+	if b {
+		return 1
+	} else {
+		return 0
+	}
 }
