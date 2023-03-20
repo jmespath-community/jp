@@ -4,6 +4,7 @@ JP_VERSION=""
 all: build test
 
 build:
+	git submodule update --init --checkout --recursive --force
 	go build ./...
 
 test:
