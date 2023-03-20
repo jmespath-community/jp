@@ -60,5 +60,5 @@ jobs:
             build/jp-linux-amd64
             build/jp-linux-arm-arm7
             build/jp-linux-arm64
-            build/jp-windows-386
-            build/jp-windows-amd64
+            build/jp-windows-386.exe
+            build/jp-windows-amd64.exe

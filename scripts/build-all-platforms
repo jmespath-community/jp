@@ -9,10 +9,14 @@ rm -rf ./build/jp-*
 # All builds for 386/amd64.
 for goos in darwin linux windows freebsd; do
 	export GOOS="$goos"
+	export EXT=""
+	if [ "$goos" = "windows" ]; then
+		export EXT=".exe"
+	fi
 	for goarch in 386 amd64; do
 		export GOARCH="$goarch"
 		echo "Building for $GOOS/$GOARCH"
-		go build -v -o build/jp-$GOOS-$GOARCH 2>/dev/null
+		go build -v -o build/jp-$GOOS-$GOARCH$EXT 2>/dev/null
 	done
 done
 # Now handle ARM builds.
