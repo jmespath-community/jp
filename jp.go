@@ -6,7 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/jmespath-community/go-jmespath"
+	"github.com/nwidger/jsoncolor"
 	"github.com/urfave/cli"
 )
 
@@ -31,6 +33,11 @@ func main() {
 		cli.StringFlag{
 			Name:  "expr-file, e",
 			Usage: "Read JMESPath expression from the specified file.",
+		},
+		cli.StringFlag{
+			Name:  "color",
+			Value: "auto",
+			Usage: "Change the color setting (none, auto, always). auto is based on whether output is a tty.",
 		},
 		cli.BoolFlag{
 			Name:   "unquoted, u",
@@ -119,7 +126,12 @@ func runMain(c *cli.Context) int {
 		if c.Bool("compact") {
 			toJSON, err = json.Marshal(result)
 		} else {
-			toJSON, err = json.MarshalIndent(result, "", "  ")
+			if color.NoColor {
+				// avoid doing the extra processing in jsoncolor
+				toJSON, err = json.MarshalIndent(result, "", "  ")
+			} else {
+				toJSON, err = jsoncolor.MarshalIndent(result, "", "  ")
+			}
 		}
 		if err != nil {
 			errMsg("Error marshalling result to JSON: %s\n", err)
