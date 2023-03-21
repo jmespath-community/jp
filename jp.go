@@ -84,11 +84,11 @@ func runMain(c *cli.Context) int {
 	// colors.
 	switch c.String("color") {
 	case "always":
-		EnableColor(true)
+		enableColor(true)
 	case "auto":
 		// this is the default in the library
 	case "never":
-		EnableColor(false)
+		enableColor(false)
 	default:
 		return errMsg("Invalid color specification. Must use always/auto/never")
 	}
@@ -152,7 +152,7 @@ func runMain(c *cli.Context) int {
 	return 0
 }
 
-func EnableColor(enabled bool) {
+func enableColor(enabled bool) {
 
 	if enabled {
 		jsoncolor.DefaultArrayColor.EnableColor()
