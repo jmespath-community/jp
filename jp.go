@@ -77,16 +77,15 @@ func runMain(c *cli.Context) int {
 		}
 		expression = c.Args()[0]
 	}
-	// NoColor defines if the output is colorized or not. It's dynamically set to
-	// false or true based on the stdout's file descriptor referring to a terminal
-	// or not. It's also set to true if the NO_COLOR environment variable is
-	// set (regardless of its value). This is a global option and affects all
-	// colors.
 	switch c.String("color") {
 	case "always":
 		enableColor(true)
 	case "auto":
-		// this is the default in the library
+		// this requests the default behaviour in the jsoncolor library
+		// color output is enabled or disabled dynamically based on the
+		// stdout's file descriptor referring to a terminal or not.
+		// Additionally, if the NO_COLOR environment variable is set
+		// (regardless of its value) color output will be disabled.
 	case "never":
 		enableColor(false)
 	default:
