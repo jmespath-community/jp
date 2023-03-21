@@ -137,8 +137,11 @@ func runMain(c *cli.Context) int {
 		os.Stdout.WriteString(converted)
 	} else {
 		var toJSON []byte
-		var jsonWriter = getJSONWriter(c.Bool("compact"))
-		toJSON, err = jsonWriter(result)
+		if c.Bool("compact") {
+			toJSON, err = jsoncolor.Marshal(result)
+		} else {
+			toJSON, err = jsoncolor.MarshalIndent(result, "", "  ")
+		}
 		if err != nil {
 			errMsg("Error marshalling result to JSON: %s\n", err)
 			return 3
@@ -180,21 +183,5 @@ func EnableColor(enabled bool) {
 		jsoncolor.DefaultStringColor.DisableColor()
 		jsoncolor.DefaultStringQuoteColor.DisableColor()
 		jsoncolor.DefaultTrueColor.DisableColor()
-	}
-}
-
-func getJSONWriter(compact bool) func(v interface{}) ([]byte, error) {
-	var writers = [2]func(v interface{}) ([]byte, error){
-		func(v interface{}) ([]byte, error) { return jsoncolor.MarshalIndent(v, "", "  ") },
-		jsoncolor.Marshal,
-	}
-	return writers[bool2int(compact)]
-}
-
-func bool2int(b bool) int {
-	if b {
-		return 1
-	} else {
-		return 0
 	}
 }
