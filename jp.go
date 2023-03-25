@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/jmespath-community/go-jmespath"
+	"github.com/nwidger/jsoncolor"
 	"github.com/urfave/cli"
 )
 
@@ -32,6 +33,11 @@ func main() {
 		cli.StringFlag{
 			Name:  "expr-file, e",
 			Usage: "Read JMESPath expression from the specified file.",
+		},
+		cli.StringFlag{
+			Name:  "color",
+			Value: "auto",
+			Usage: "Change the color setting (none, auto, always). auto is based on whether output is a tty.",
 		},
 		cli.BoolFlag{
 			Name:   "unquoted, u",
@@ -75,6 +81,20 @@ func runMain(c *cli.Context) int {
 			return errMsg("Must provide at least one argument.")
 		}
 		expression = c.Args()[0]
+	}
+	switch c.String("color") {
+	case "always":
+		enableColor(true)
+	case "auto":
+		// this requests the default behaviour in the jsoncolor library
+		// color output is enabled or disabled dynamically based on the
+		// stdout's file descriptor referring to a terminal or not.
+		// Additionally, if the NO_COLOR environment variable is set
+		// (regardless of its value) color output will be disabled.
+	case "never":
+		enableColor(false)
+	default:
+		return errMsg("Invalid color specification. Must use always/auto/never")
 	}
 	if c.Bool("ast") {
 		parser := jmespath.NewParser()
@@ -141,4 +161,38 @@ func runMain(c *cli.Context) int {
 		}
 	}
 	return 0
+}
+
+func enableColor(enabled bool) {
+
+	if enabled {
+		jsoncolor.DefaultArrayColor.EnableColor()
+		jsoncolor.DefaultColonColor.EnableColor()
+		jsoncolor.DefaultCommaColor.EnableColor()
+		jsoncolor.DefaultFalseColor.EnableColor()
+		jsoncolor.DefaultFieldColor.EnableColor()
+		jsoncolor.DefaultFieldQuoteColor.EnableColor()
+		jsoncolor.DefaultNullColor.EnableColor()
+		jsoncolor.DefaultNumberColor.EnableColor()
+		jsoncolor.DefaultObjectColor.EnableColor()
+		jsoncolor.DefaultSpaceColor.EnableColor()
+		jsoncolor.DefaultStringColor.EnableColor()
+		jsoncolor.DefaultStringQuoteColor.EnableColor()
+		jsoncolor.DefaultTrueColor.EnableColor()
+
+	} else {
+		jsoncolor.DefaultArrayColor.DisableColor()
+		jsoncolor.DefaultColonColor.DisableColor()
+		jsoncolor.DefaultCommaColor.DisableColor()
+		jsoncolor.DefaultFalseColor.DisableColor()
+		jsoncolor.DefaultFieldColor.DisableColor()
+		jsoncolor.DefaultFieldQuoteColor.DisableColor()
+		jsoncolor.DefaultNullColor.DisableColor()
+		jsoncolor.DefaultNumberColor.DisableColor()
+		jsoncolor.DefaultObjectColor.DisableColor()
+		jsoncolor.DefaultSpaceColor.DisableColor()
+		jsoncolor.DefaultStringColor.DisableColor()
+		jsoncolor.DefaultStringQuoteColor.DisableColor()
+		jsoncolor.DefaultTrueColor.DisableColor()
+	}
 }
