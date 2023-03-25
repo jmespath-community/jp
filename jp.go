@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/jmespath-community/go-jmespath"
-	"github.com/springcomp/jsoncolor"
+	"github.com/nwidger/jsoncolor"
 	"github.com/urfave/cli"
 )
 
