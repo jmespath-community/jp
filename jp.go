@@ -17,7 +17,7 @@ const version = "1.1.0"
 func main() {
 	app := cli.NewApp()
 	app.Name = "jp"
-	app.Version = version
+	app.Version = fmt.Sprintf("%s, community edition", version)
 	app.Usage = "jp [<options>] <expression>"
 	app.Author = ""
 	app.Email = ""
