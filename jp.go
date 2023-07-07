@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -143,12 +144,11 @@ func runMain(c *cli.Context) int {
 		if c.Bool("unquoted") && isString {
 			os.Stdout.WriteString(converted)
 		} else {
-			var toJSON []byte
-			if c.Bool("compact") {
-				toJSON, err = json.Marshal(result)
-			} else {
-				toJSON, err = json.MarshalIndent(result, "", "  ")
+			enc := newEncorder()
+			if !c.Bool("compact") {
+				enc.SetIndent("", "  ")
 			}
+			toJSON, err := enc.marshal(result)
 			if err != nil {
 				errMsg("Error marshalling result to JSON: %s\n", err)
 				return 3
@@ -195,4 +195,28 @@ func enableColor(enabled bool) {
 		jsoncolor.DefaultStringQuoteColor.DisableColor()
 		jsoncolor.DefaultTrueColor.DisableColor()
 	}
+}
+
+type encoder struct {
+	*json.Encoder
+	buf *bytes.Buffer
+}
+
+func newEncorder() *encoder {
+	buf := &bytes.Buffer{}
+	e := &encoder{Encoder: json.NewEncoder(buf), buf: buf}
+	e.SetEscapeHTML(false)
+	return e
+}
+
+func (e *encoder) marshal(t interface{}) ([]byte, error) {
+	// Encode() always append a newline.
+	err := e.Encode(t)
+	if err != nil {
+		return nil, err
+	}
+
+	// Trim the newline appended by Encode().
+	b := bytes.TrimSuffix(e.buf.Bytes(), []byte("\n"))
+	return append([]byte(nil), b...), nil
 }
