@@ -7,7 +7,7 @@ build:
 	git submodule update --init --checkout --recursive --force
 	go build ./...
 
-test:
+test: build
 	# CLI specific test cases.
 	test/vendor/bats/libexec/bats test/cases
 	# JMESPath compliance tests, using the jp-compliance
